@@ -4,7 +4,8 @@ import numpy as np
 import pandas as pd
 import deepchem as dc
 
-#data processing
+# Part 1: data processing
+
 kkb_chembl_file = "kkb_chembl_standardizedAggregation_geq15_061916.csv.gz"
 df = pd.read_csv(kkb_chembl_file)
 df["active"] = df.kinasemodel6.apply(lambda x: 1 if x is not np.nan else 0)
@@ -31,7 +32,8 @@ todrop = k[k < 15].index
 mt_df = mt_df.drop(todrop, axis=1)
 mt_df.to_csv("chembl_kkb_multi_task_data_083021.csv.gz", index=False, compression="gzip")
 
-#model training
+# Part 2: model training
+
 df = pd.read_csv("chembl_kkb_multi_task_data_083021.csv.gz")
 FP_SIZE=1024
 RADIUS=2
