@@ -1,4 +1,3 @@
-# Part 1: Training dataset input Processing
 import os
 import numpy as np
 import pandas as pd
@@ -18,6 +17,8 @@ from rdkit import DataStructs
 from rdkit.Chem.Fingerprints import FingerprintMols
 from rdkit.Chem import rdMolDescriptors
 import json
+
+# Part 1: Training dataset input Processing
 
 kkb_chembl_file = "kkb_chembl_standardizedAggregation_geq15_061916.csv.gz"
 df = pd.read_csv(kkb_chembl_file)
