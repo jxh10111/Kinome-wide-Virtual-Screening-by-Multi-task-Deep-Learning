@@ -220,3 +220,6 @@ with tb.open_file(f"mt_data_{CHEMBL_VERSION}.h5", mode="r") as t_file:
     with open(f"targets_{CHEMBL_VERSION}.json", "w") as f:
         json.dump(t_file.root.target_chembl_ids[:], f)
 
+
+        
+        
