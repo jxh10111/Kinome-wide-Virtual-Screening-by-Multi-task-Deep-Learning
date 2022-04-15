@@ -1,4 +1,4 @@
-# Part 1: Input Processing
+# Part 1: Training dataset input Processing
 import os
 import numpy as np
 import pandas as pd
@@ -122,52 +122,3 @@ for train, test in KFold2:
     mark = mark+1
 
 final_roc = np.array(final_roc)
- 
-
-# Part3: IDG Testing
-
-IDG_fixed = "IDG_Challenge_round1_pKd_fixed.csv.gz"
-mt_IDG_fixed = pd.read_csv(IDG_fixed)
-
-loader_IDG_fixed = dc.data.CSVLoader(tasks=mt_df.columns.values[1:].tolist(),
-                           featurizer=dc.feat.CircularFingerprint(size=1024, radius=2),
-                           smiles_field="Compound SMILES")
-
-#os.makedirs("dc_IDG_fixed")
-dataset_IDG_fixed = loader_IDG_fixed.featurize("IDG_Challenge_round1_pKd_fixed.csv.gz", data_dir = "dc_IDG_fixed")
-
-Test_IDG = dataset_IDG_fixed.y
-
-#Load a random forest
-loaded_rf = joblib.load("random_forest_0.joblib")
-
-IDG_prediction = loaded_rf.predict_proba(dataset_IDG_fixed.X)
-IDG_prediction2  = np.array(IDG_prediction)
-IDG_prediction3 = IDG_prediction2[:,:,1]
-IDG_prediction4 = np.transpose(IDG_prediction3)
-IDG_True = np.array(Test_IDG)
-IDG_prediction5 = pd.DataFrame(IDG_prediction4,columns=dataset_IDG_fixed.tasks,index=dataset_IDG_fixed.ids)
-IDG_prediction5.to_csv("IDG_Prediction_Probabilities.csv")
-IDG_prediction6 = round(IDG_prediction5)
-IDG_prediction6.to_csv("IDG_Predictions.csv")
-
-
-n_classes = IDG_True.shape[1]
-# Compute ROC curve and ROC area for each class
-fpr = dict()
-tpr = dict()
-roc_auc = dict()
-for i in range(n_classes):
-    fpr[i], tpr[i], _ = roc_curve(IDG_True[:,i], IDG_prediction4[:,i])
-    roc_auc[i] = auc(fpr[i], tpr[i])
-
-roc_auc2 =  pd.DataFrame(list(roc_auc.items()),index=dataset_IDG_fixed.tasks)
-roc_auc3 = roc_auc2.drop(0, axis=1) 
-roc_auc3.columns = ["ROC"]
-roc_auc3.to_csv("IDG_ROC_AUC_per_Task.csv")
-
-IDG_active_probability_predictions = IDG_prediction[:, :, 1]
-IDG_prob_active_df = pd.DataFrame(IDG_active_probability_predictions, columns=dataset_IDG_fixed.tasks, index=dataset_IDG_fixed.ids)
-
-pred_active_df = (IDG_prob_active_df > 0.5).astype(int)
-IDG_pred_active_df = pred_active_df.iloc[:, :]
