@@ -4,7 +4,34 @@ import numpy as np
 import pandas as pd
 import deepchem as dc
 
+#data processing
+kkb_chembl_file = "kkb_chembl_standardizedAggregation_geq15_061916.csv.gz"
+df = pd.read_csv(kkb_chembl_file)
+df["active"] = df.kinasemodel6.apply(lambda x: 1 if x is not np.nan else 0)
+def gen_dict(group):
+    return {tid: act for tid, act in zip(group["AssayTarget"], group["active"])}
 
+group = df.groupby("Canonical_Smiles")
+temp = pd.DataFrame(group.apply(gen_dict))
+mt_df = pd.DataFrame(temp[0].tolist())
+mt_df["Canonical_Smiles"] = temp.index
+mt_df = mt_df.where((pd.notnull(mt_df)), -1)
+
+structs = df[["Canonical_Smiles"]].drop_duplicates("Canonical_Smiles")
+structs["romol"] = structs.apply(lambda row: Chem.MolFromSmiles(row["Canonical_Smiles"]), axis=1)
+structs = structs.dropna()
+del structs["romol"]
+
+mt_df = pd.merge(structs, mt_df, how="inner", on="Canonical_Smiles")
+mt_df = mt_df.replace(-1, 0)
+k = mt_df.sum()
+k.drop("Canonical_Smiles", inplace=True)
+k = k.astype(float)
+todrop = k[k < 15].index
+mt_df = mt_df.drop(todrop, axis=1)
+mt_df.to_csv("chembl_kkb_multi_task_data_083021.csv.gz", index=False, compression="gzip")
+
+#model training
 df = pd.read_csv("chembl_kkb_multi_task_data_083021.csv.gz")
 FP_SIZE=1024
 RADIUS=2
