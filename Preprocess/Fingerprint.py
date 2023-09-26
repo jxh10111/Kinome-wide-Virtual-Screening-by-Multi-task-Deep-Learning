@@ -1,6 +1,7 @@
 from rdkit import Chem
 from rdkit.Chem import rdMolDescriptors
 
+
 FP_SIZE=1024
 RADIUS=2
 
