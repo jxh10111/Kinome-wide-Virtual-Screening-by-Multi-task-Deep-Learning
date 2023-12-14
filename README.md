@@ -1,6 +1,6 @@
-# Deep learning-based Virtual Screening for Kinome-wide Small Molecule Activity Prediction
+# Kinome-wide Virtual Screening by Multi-task Deep Learning
 
-This repository contains code for multi-task deep neural network (MTDNN) model training using aggregated KKB and ChEMBL dataset, LINCS and IDG model prediction, non-deep learning multi-task random forest modeling, and other analyses described in "Deep learning-based Virtual Screening for Kinome-wide Small Molecule Activity Prediction" by Jiaming Hu, Bryce K. Allen, Vasileios Stathias, Nagi G. Ayad, and Stephan C. Schürer. 
+This repository contains code for multi-task deep neural network (MTDNN) model training using aggregated KKB and ChEMBL dataset, LINCS and IDG model prediction, non-deep learning multi-task random forest modeling, and other analyses described in "Kinome-wide Virtual Screening by Multi-task Deep Learning" by Jiaming Hu, Bryce K. Allen, Vasileios Stathias, Nagi G. Ayad, and Stephan C. Schürer. 
 
 # Package version
 
