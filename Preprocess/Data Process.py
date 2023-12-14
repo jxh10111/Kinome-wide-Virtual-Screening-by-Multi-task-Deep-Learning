@@ -3,7 +3,7 @@ import pandas as pd
 from rdkit import Chem
 
 
-input_file = "kkb_chembl_standardizedAggregation_geq15_061916.csv.gz"
+input_file = "kkb_chembl_standardizedAggregation.csv.gz"
 output_file = "chembl_kkb_multi_task_data.csv.gz"
 
 
